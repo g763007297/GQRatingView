@@ -24,13 +24,13 @@
     
     fiveStar.canTouch = YES;
     
-    fiveStar.needIntValue = NO;
+    fiveStar.needIntValue = YES;
     
     fiveStar.scoreNum = [NSNumber numberWithInt:5];
     
-    fiveStar.scoreBlock = ^(float number){
+    fiveStar.scoreBlock = ^(NSNumber *scoreNumber){
         
-        NSLog(@"%.1f",number);
+        NSLog(@"%@",scoreNumber);
         
     };
     

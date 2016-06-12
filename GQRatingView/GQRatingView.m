@@ -17,9 +17,7 @@
 #define StringFormat(x) [NSString stringWithFormat:@"%d",x]
 #endif
 
-static float kRatingLabelWidth = 30;  //星星默认宽度
-
-static NSString *scoreFormat = @"0.0";//分数格式化样式 依据四舍五入
+static NSString *scoreFormat = @"0.00";//分数格式化样式 依据四舍五入
 
 //格式化小数 四舍五入类型
 extern float decimalwithFormat(NSString * format, float floatV) {
@@ -49,7 +47,7 @@ extern float decimalwithFormat(NSString * format, float floatV) {
 
 - (instancetype)initWithPoint:(CGPoint)point withSize:(float)size
 {
-    self = [super initWithFrame:CGRectMake(point.x, point.y, size, size)];
+    self = [super initWithFrame:CGRectMake(point.x, point.y, size*5, size)];
     if (self) {
         [self _initViews];
     }
@@ -110,31 +108,33 @@ extern float decimalwithFormat(NSString * format, float floatV) {
     [self setNeedsLayout];
 }
 
+- (void)setCanTouch:(BOOL)canTouch{
+    _canTouch = canTouch;
+    self.userInteractionEnabled = canTouch;
+}
+
 - (void)layoutSubviews
 {
     [super layoutSubviews];
     
-    CGFloat star5Width = self.frame.size.height * 5;
-    CGRect frame = self.frame;
-    frame.size.width = _canTouch?star5Width:kRatingLabelWidth +star5Width ;
-    self.frame = frame;
-    
     //5个星星铺满后的宽度
     CGFloat grayWidth = self.frame.size.height * 5;
     
+    CGFloat grayHight = self.frame.size.height;
+    
     //压缩星星
-    UIImage *grayImg = [GQStarView getStarWithRadius:self.frame.size.height withFillColor:[UIColor grayColor]];
+    UIImage *grayImg = [GQStarView getStarWithRadius:grayHight withFillColor:[UIColor grayColor]];
     
     _grayView.backgroundColor = [UIColor colorWithPatternImage:grayImg];
-    _grayView.transform = CGAffineTransformMakeScale(self.frame.size.height/grayImg.size.width, self.frame.size.height/grayImg.size.height);
+    _grayView.transform = CGAffineTransformMakeScale(grayHight/grayImg.size.width, grayHight/grayImg.size.height);
     
-    UIImage *yelloImg = [GQStarView getStarWithRadius:self.frame.size.height withFillColor:[UIColor yellowColor]];
+    UIImage *yelloImg = [GQStarView getStarWithRadius:grayHight withFillColor:[UIColor yellowColor]];
     
     _yelloView.backgroundColor = [UIColor colorWithPatternImage:yelloImg];
-    _yelloView.transform = CGAffineTransformMakeScale(self.frame.size.height/yelloImg.size.width, self.frame.size.height/yelloImg.size.height);
+    _yelloView.transform = CGAffineTransformMakeScale(grayHight/yelloImg.size.width, grayHight/yelloImg.size.height);
     
-    _grayView.frame = CGRectMake(0, 0, grayWidth, self.frame.size.height);
-    _yelloView.frame = CGRectMake(0, 0, grayWidth, self.frame.size.height);
+    _grayView.frame = CGRectMake(0, 0, grayWidth, grayHight);
+    _yelloView.frame = CGRectMake(0, 0, grayWidth, grayHight);
     
     float score = [_scoreNum floatValue];
     
@@ -153,13 +153,14 @@ extern float decimalwithFormat(NSString * format, float floatV) {
     [self setUpScoreWithTouch:touches];
 }
 
-- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     [self setUpScoreWithTouch:touches];
 }
 
 #pragma mark -- 处理touch事件
-- (void)setUpScoreWithTouch:(NSSet<UITouch *> *)touches{
+- (void)setUpScoreWithTouch:(NSSet<UITouch *> *)touches
+{
     if (!self.canTouch) {
         return;
     }
@@ -174,7 +175,7 @@ extern float decimalwithFormat(NSString * format, float floatV) {
     
     float stringFloat = touchPoint.x;
     
-    float a = decimalwithFormat(scoreFormat, 5*stringFloat/weight);
+    float a = decimalwithFormat(scoreFormat, 5.0f*stringFloat/weight);
     
     if (_needIntValue) {
         if (a>4) {
@@ -190,14 +191,12 @@ extern float decimalwithFormat(NSString * format, float floatV) {
         }
     }
     
-    float score = a;
-    
-    self.scoreNum = [NSNumber numberWithFloat:score];
+    self.scoreNum = [NSNumber numberWithFloat:a];
     
     [self setNeedsLayout];
     
     if (_scoreBlock) {
-        _scoreBlock(score);
+        _scoreBlock(_scoreNum);
     }
 }
 

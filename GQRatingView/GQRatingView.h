@@ -10,8 +10,6 @@
 
 @interface GQRatingView : UIView
 
-+ (instancetype)init;
-
 /**
  *  initMethod
  *
@@ -23,7 +21,7 @@
 + (instancetype)initWithPoint:(CGPoint)point withSize:(float)size;
 
 /**
- *  分数是否显示为整数
+ *  分数是否显示为整数 星星都是整个整个显示
  */
 @property (nonatomic, assign) BOOL needIntValue;
 
@@ -35,7 +33,7 @@
 /**
  *  如果touch为YES 这个也可以一起实现
  */
-@property (nonatomic, copy) void (^scoreBlock)(float number);
+@property (nonatomic, copy) void (^scoreBlock)(NSNumber *scoreNumber);
 
 /**
  *  初始分数    默认满分为5分 0 - 5
