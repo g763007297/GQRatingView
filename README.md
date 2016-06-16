@@ -3,7 +3,7 @@
 [![support](https://img.shields.io/badge/support-iOS5.0%2B-blue.svg)](https://www.apple.com/nl/ios/)&nbsp;
 
 # GQRatingView
-五星评分RatingView，支持拖拽点击评分，可自定义五角星样式。
+五星评分RatingView，支持拖拽点击评分，可自定义五角星样式,支持链式调用。
 
 ## Overview
 
@@ -28,6 +28,17 @@
 4.添加代码：
 
 ``` objc
+    //链式调用
+    [GQRatingView init]
+    .frameChain(CGPointMake(50, 100),50)
+    .canTouchChain(YES)
+    .needIntValueChain(YES)
+    .scoreNumChain(@5)
+    .scroreBlockChain(^(NSNumber *scoreNumber){
+        NSLog(@"%@",scoreNumber);
+    }).superViewChain(self.view);
+
+    //普通用法
     GQRatingView *fiveStar = [GQRatingView initWithPoint:CGPointMake(50, 100) withSize:50];
     
     fiveStar.canTouch = YES;//设置可以触摸
