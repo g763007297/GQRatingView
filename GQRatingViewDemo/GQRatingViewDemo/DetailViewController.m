@@ -20,21 +20,25 @@
     
     self.navigationController.visibleViewController.title = @"五星好评返现5元";
     
-    GQRatingView *fiveStar = [GQRatingView initWithPoint:CGPointMake(50, 100) withSize:50];
-    
-    fiveStar.canTouch = YES;
-    
-    fiveStar.needIntValue = YES;
-    
-    fiveStar.scoreNum = [NSNumber numberWithInt:5];
-    
-    fiveStar.scoreBlock = ^(NSNumber *scoreNumber){
-        
+    //链式调用
+    [GQRatingView init]
+    .frameChain(CGPointMake(50, 100),50)
+    .canTouchChain(YES)
+    .needIntValueChain(YES)
+    .scoreNumChain(@5)
+    .scroreBlockChain(^(NSNumber *scoreNumber){
         NSLog(@"%@",scoreNumber);
-        
-    };
+    }).superViewChain(self.view);
     
-    [self.view addSubview:fiveStar];
+    //普通用法
+//    GQRatingView *fiveStar = [GQRatingView initWithPoint:CGPointMake(50, 100) withSize:50];
+//    fiveStar.canTouch = YES;
+//    fiveStar.needIntValue = YES;
+//    fiveStar.scoreNum = [NSNumber numberWithInt:5];
+//    fiveStar.scroreBlock = ^(NSNumber *scoreNumber){
+//        NSLog(@"%@",scoreNumber);
+//    };
+//    [self.view addSubview:fiveStar];
 }
 
 - (void)viewDidLoad {
