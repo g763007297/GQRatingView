@@ -17,6 +17,26 @@
 #define StringFormat(x) [NSString stringWithFormat:@"%d",x]
 #endif
 
+#define WeakSelf(_self_)\
+    __weak typeof(_self_) weakself = _self_;\
+
+#define StrongSelf(_self_)\
+    __strong typeof(weak##_self_) self = weak##_self_;
+
+#define GQChainObjectDefine(_key_name_,_Chain_, _type_ , _block_type_)\
+- (_block_type_)_key_name_\
+{\
+    WeakSelf(self);\
+    if (!_##_key_name_) {\
+        _##_key_name_ = ^(_type_ value){\
+            StrongSelf(self);\
+            [self set##_Chain_:value];\
+            return self;\
+        };\
+    }\
+    return _##_key_name_;\
+}\
+
 static NSString *scoreFormat = @"0.00";//分数格式化样式 依据四舍五入
 
 //格式化小数 四舍五入类型
@@ -35,10 +55,50 @@ extern float decimalwithFormat(NSString * format, float floatV) {
 
 @implementation GQRatingView
 
+#pragma mark ---链式调用
+
+@synthesize frameChain = _frameChain;
+@synthesize needIntValueChain =_needIntValueChain;
+@synthesize canTouchChain = _canTouchChain;
+@synthesize scroreBlockChain = _scroreBlockChain;
+@synthesize scoreNumChain = _scoreNumChain;
+@synthesize superViewChain = _superViewChain;
+
 + (instancetype)init
 {
     return [[self alloc] init];
 }
+
+- (GQFrameChain)frameChain{
+    if (!_frameChain) {
+        __weak typeof(self) weakSelf = self;
+        _frameChain = ^(CGPoint point, float size){
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            strongSelf.frame = CGRectMake(point.x, point.y, size*5, size);
+            return strongSelf;
+        };
+    }
+    return _frameChain;
+}
+
+GQChainObjectDefine(needIntValueChain, NeedIntValue, BOOL, GQNeedIntValueChain);
+GQChainObjectDefine(canTouchChain, CanTouch, BOOL, GQCanTouchChain);
+GQChainObjectDefine(scroreBlockChain, ScroreBlock, GQScoreBlock, GQScroreBlockChain);
+GQChainObjectDefine(scoreNumChain, ScoreNum, NSNumber *, GQScoreNumChain);
+
+- (GQSuperViewChain)superViewChain{
+    if (!_superViewChain) {
+        WeakSelf(self);
+        _superViewChain = ^(UIView *superView){
+            StrongSelf(self);
+            [superView addSubview:self];
+            return self;
+        };
+    }
+    return _superViewChain;
+}
+
+#pragma mark --- 方法调用
 
 + (instancetype)initWithPoint:(CGPoint)point withSize:(float)size
 {
@@ -195,8 +255,8 @@ extern float decimalwithFormat(NSString * format, float floatV) {
     
     [self setNeedsLayout];
     
-    if (_scoreBlock) {
-        _scoreBlock(_scoreNum);
+    if (_scroreBlock) {
+        _scroreBlock(_scoreNum);
     }
 }
 

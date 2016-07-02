@@ -8,7 +8,58 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^GQScoreBlock)(NSNumber *scoreNumber);
+
+@class GQRatingView;
+
+typedef GQRatingView *(^GQFrameChain)(CGPoint point, float size);
+typedef GQRatingView *(^GQNeedIntValueChain)(BOOL needIntValue);
+typedef GQRatingView *(^GQCanTouchChain)(BOOL canTouch);
+typedef GQRatingView *(^GQScroreBlockChain)(GQScoreBlock scroreBlock);
+typedef GQRatingView *(^GQScoreNumChain)(NSNumber *scoreNum);
+typedef GQRatingView * (^GQSuperViewChain)(UIView *superView);
+
 @interface GQRatingView : UIView
+
+#pragma mark -- 链式调用
+/**
+ *  链式调用
+ *
+ *  @return GQRatingView
+ */
++ (instancetype)init;
+
+/**
+ *  设置point和size   传值 : frameChain(CGPoint,float)
+ */
+@property (nonatomic, copy, readonly) GQFrameChain frameChain;
+
+/**
+ *  分数是否显示为整数 如果为yes星星都是整个整个显示   needIntValueChain(BOOL)
+ */
+@property (nonatomic, copy, readonly) GQNeedIntValueChain needIntValueChain;
+
+/**
+ *  默认为NO  星星是否可以点击   canTouchChain(BOOL)
+ */
+@property (nonatomic, copy, readonly) GQCanTouchChain canTouchChain;
+
+/**
+ *  如果touch为YES 这个也可以一起实现  scroreBlockChain(GQScoreBlock)
+ */
+@property (nonatomic, copy, readonly) GQScroreBlockChain scroreBlockChain;
+
+/**
+ *  初始分数    默认满分为5分 0 - 5   scoreNumChain(NSNumber *)
+ */
+@property (nonatomic, copy, readonly) GQScoreNumChain scoreNumChain;
+
+/**
+ *  显示在哪个view上面   superViewChain(UIView *)
+ */
+@property (nonatomic, copy, readonly) GQSuperViewChain superViewChain;
+
+#pragma mark -- 方法调用
 
 /**
  *  initMethod
@@ -21,7 +72,7 @@
 + (instancetype)initWithPoint:(CGPoint)point withSize:(float)size;
 
 /**
- *  分数是否显示为整数 星星都是整个整个显示
+ *  分数是否显示为整数 如果为yes星星都是整个整个显示
  */
 @property (nonatomic, assign) BOOL needIntValue;
 
@@ -33,7 +84,7 @@
 /**
  *  如果touch为YES 这个也可以一起实现
  */
-@property (nonatomic, copy) void (^scoreBlock)(NSNumber *scoreNumber);
+@property (nonatomic, copy) GQScoreBlock scroreBlock;
 
 /**
  *  初始分数    默认满分为5分 0 - 5
