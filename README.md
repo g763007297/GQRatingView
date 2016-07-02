@@ -1,6 +1,6 @@
  [![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://raw.githubusercontent.com/angelcs1990/GQGesVCTransition/master/LICENSE)&nbsp;
 [![](https://img.shields.io/badge/platform-iOS-brightgreen.svg)](http://cocoapods.org/?q=GQGesVCTransition)&nbsp;
-[![support](https://img.shields.io/badge/support-iOS5.0%2B-blue.svg)](https://www.apple.com/nl/ios/)&nbsp;
+[![support](https://img.shields.io/badge/support-iOS6.0%2B-blue.svg)](https://www.apple.com/nl/ios/)&nbsp;
 
 # GQRatingView
 五星评分RatingView，支持拖拽点击评分，可自定义五角星样式,支持链式调用。
@@ -56,4 +56,4 @@
     [self.view addSubview:fiveStar];
 ```
 
-欢迎指出错误的方法或者需要改善的地方。联系qq：763007297
+欢迎指出错误的方法或者需要改善的地方，欢迎提出issues，或者联系qq：763007297，我会及时的做出回应。
