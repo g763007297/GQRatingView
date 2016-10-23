@@ -46,7 +46,7 @@ extern float decimalwithFormat(NSString * format, float floatV) {
     return  [[numberFormatter stringFromNumber:[NSNumber numberWithFloat:floatV]] floatValue];
 }
 
-@interface GQRatingView(){
+@interface GQRatingView() {
     UIView *_yelloView; //金色星星视图
     UIView *_grayView;  //灰色星星
 }
@@ -69,7 +69,7 @@ extern float decimalwithFormat(NSString * format, float floatV) {
     return [[self alloc] init];
 }
 
-- (GQFrameChain)frameChain{
+- (GQFrameChain)frameChain {
     if (!_frameChain) {
         __weak typeof(self) weakSelf = self;
         _frameChain = ^(CGPoint point, float size){
@@ -86,7 +86,7 @@ GQChainObjectDefine(canTouchChain, CanTouch, BOOL, GQCanTouchChain);
 GQChainObjectDefine(scroreBlockChain, ScroreBlock, GQScoreBlock, GQScroreBlockChain);
 GQChainObjectDefine(scoreNumChain, ScoreNum, NSNumber *, GQScoreNumChain);
 
-- (GQSuperViewChain)superViewChain{
+- (GQSuperViewChain)superViewChain {
     if (!_superViewChain) {
         WeakSelf(self);
         _superViewChain = ^(UIView *superView){
@@ -125,6 +125,7 @@ GQChainObjectDefine(scoreNumChain, ScoreNum, NSNumber *, GQScoreNumChain);
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
     [self _initViews];
 }
 
@@ -168,7 +169,8 @@ GQChainObjectDefine(scoreNumChain, ScoreNum, NSNumber *, GQScoreNumChain);
     [self setNeedsLayout];
 }
 
-- (void)setCanTouch:(BOOL)canTouch{
+- (void)setCanTouch:(BOOL)canTouch
+{
     _canTouch = canTouch;
     self.userInteractionEnabled = canTouch;
 }
@@ -240,11 +242,11 @@ GQChainObjectDefine(scoreNumChain, ScoreNum, NSNumber *, GQScoreNumChain);
     if (_needIntValue) {
         if (a>4) {
             a=5;
-        }else if (a>3){
+        }else if (a>3) {
             a=4;
-        }else if (a>2){
+        }else if (a>2) {
             a=3;
-        }else if (a>1){
+        }else if (a>1) {
             a=2;
         }else{
             a=1;

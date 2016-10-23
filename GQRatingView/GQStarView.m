@@ -25,7 +25,7 @@ extern UIImage * getImageFromView(UIView *orgView)
     return image;
 }
 
-@interface GQStarView(){
+@interface GQStarView() {
     UIColor *bgStarColor;   //填充颜色
 }
 
