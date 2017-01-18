@@ -3,7 +3,7 @@
 [![support](https://img.shields.io/badge/support-iOS6.0%2B-blue.svg)](https://www.apple.com/nl/ios/)&nbsp;
 
 # GQRatingView
-五星评分RatingView，支持拖拽点击评分，可自定义五角星样式,支持链式调用。
+五星评分RatingView，支持拖拽点击评分，过渡动画平滑，可自定义五角星样式和颜色,支持链式调用。
 
 ## Overview
 

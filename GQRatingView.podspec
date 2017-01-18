@@ -1,8 +1,8 @@
 Pod::Spec.new do |s|
 
   s.name         = "GQRatingView"
-  s.version = "0.0.5"
-  s.summary      = "五星评分RatingView，支持拖拽点击评分，可自定义五角星样式."
+  s.version = "0.0.6"
+  s.summary      = "五星评分RatingView，支持拖拽点击评分，可自定义五角星样式，颜色."
 
   s.homepage     = "https://github.com/g763007297/GQRatingView"
   # s.screenshots  = "https://github.com/g763007297/GQRatingView/blob/master/ScreenShot/demo.gif"
