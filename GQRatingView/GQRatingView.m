@@ -49,6 +49,9 @@ extern float decimalwithFormat(NSString * format, float floatV) {
 @interface GQRatingView() {
     UIView *_yelloView; //金色星星视图
     UIView *_grayView;  //灰色星星
+    UIColor *_normalColor;
+    UIColor *_highlightColor;
+    CGFloat _yellowWidthPercent;
 }
 
 @end
@@ -62,6 +65,8 @@ extern float decimalwithFormat(NSString * format, float floatV) {
 @synthesize canTouchChain = _canTouchChain;
 @synthesize scroreBlockChain = _scroreBlockChain;
 @synthesize scoreNumChain = _scoreNumChain;
+@synthesize normalColorChain = _normalColorChain;
+@synthesize highlightColorChian = _highlightColorChian;
 @synthesize superViewChain = _superViewChain;
 
 + (instancetype)init
@@ -85,6 +90,8 @@ GQChainObjectDefine(needIntValueChain, NeedIntValue, BOOL, GQNeedIntValueChain);
 GQChainObjectDefine(canTouchChain, CanTouch, BOOL, GQCanTouchChain);
 GQChainObjectDefine(scroreBlockChain, ScroreBlock, GQScoreBlock, GQScroreBlockChain);
 GQChainObjectDefine(scoreNumChain, ScoreNum, NSNumber *, GQScoreNumChain);
+GQChainObjectDefine(normalColorChain, NormalColor, UIColor *, GQColorChain);
+GQChainObjectDefine(highlightColorChian, HighlightColor, UIColor *, GQColorChain);
 
 - (GQSuperViewChain)superViewChain {
     if (!_superViewChain) {
@@ -147,6 +154,12 @@ GQChainObjectDefine(scoreNumChain, ScoreNum, NSNumber *, GQScoreNumChain);
     [self addSubview:_yelloView];
     self.userInteractionEnabled = YES;
     
+    _normalColor = [UIColor grayColor];
+    
+    _highlightColor = [UIColor yellowColor];
+    
+    _yellowWidthPercent = 1;
+    
     _canTouch = YES;
     
     _scoreNum = @5;
@@ -169,6 +182,22 @@ GQChainObjectDefine(scoreNumChain, ScoreNum, NSNumber *, GQScoreNumChain);
     [self setNeedsLayout];
 }
 
+- (void)setNormalColor:(UIColor *)normalColor {
+    if (_normalColor) {
+        _normalColor = nil;
+    }
+    _normalColor = normalColor;
+    [self setNeedsLayout];
+}
+
+- (void)setHighlightColor:(UIColor *)highlightColor {
+    if (_highlightColor) {
+        _highlightColor = nil;
+    }
+    _highlightColor = highlightColor;
+    [self setNeedsLayout];
+}
+
 - (void)setCanTouch:(BOOL)canTouch
 {
     _canTouch = canTouch;
@@ -185,27 +214,36 @@ GQChainObjectDefine(scoreNumChain, ScoreNum, NSNumber *, GQScoreNumChain);
     CGFloat grayHight = self.frame.size.height;
     
     //压缩星星
-    UIImage *grayImg = [GQStarView getStarWithRadius:grayHight withFillColor:[UIColor grayColor]];
+    UIImage *grayImg = [GQStarView getStarWithRadius:grayHight withFillColor:_normalColor];
     
     _grayView.backgroundColor = [UIColor colorWithPatternImage:grayImg];
     _grayView.transform = CGAffineTransformMakeScale(grayHight/grayImg.size.width, grayHight/grayImg.size.height);
     
-    UIImage *yelloImg = [GQStarView getStarWithRadius:grayHight withFillColor:[UIColor yellowColor]];
+    UIImage *yelloImg = [GQStarView getStarWithRadius:grayHight withFillColor:_highlightColor];
     
     _yelloView.backgroundColor = [UIColor colorWithPatternImage:yelloImg];
     _yelloView.transform = CGAffineTransformMakeScale(grayHight/yelloImg.size.width, grayHight/yelloImg.size.height);
     
+    NSLog(@"begin: %.2f",_yellowWidthPercent);
+    
     _grayView.frame = CGRectMake(0, 0, grayWidth, grayHight);
-    _yelloView.frame = CGRectMake(0, 0, grayWidth, grayHight);
+    _yelloView.frame = CGRectMake(0, 0, _yellowWidthPercent * grayWidth, grayHight);
     
     float score = [_scoreNum floatValue];
     
     //分数的百分比
-    float s = score/5;
+    float percent = score/5;
+    
     //根据分数的百分比调整_yelloView视图的宽度
     CGRect rect = _yelloView.frame;
-    rect.size.width = s * grayWidth;
-    _yelloView.frame = rect;
+    
+    rect.size.width = percent * grayWidth;
+    
+    _yellowWidthPercent = percent;
+    
+    [UIView animateWithDuration:0.15 animations:^{
+        _yelloView.frame = rect;
+    }];
 }
 
 #pragma mark -- touch event
@@ -240,16 +278,12 @@ GQChainObjectDefine(scoreNumChain, ScoreNum, NSNumber *, GQScoreNumChain);
     float a = decimalwithFormat(scoreFormat, 5.0f*stringFloat/weight);
     
     if (_needIntValue) {
-        if (a>4) {
-            a=5;
-        }else if (a>3) {
-            a=4;
-        }else if (a>2) {
-            a=3;
-        }else if (a>1) {
-            a=2;
-        }else{
-            a=1;
+        if (a >5) {
+            a = 5;
+        }else if (a == 0) {
+            a = 1;
+        }else {
+            a = ceil(a);
         }
     }
     

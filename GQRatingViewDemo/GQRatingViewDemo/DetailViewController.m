@@ -10,8 +10,12 @@
 
 #import "GQRatingView.h"
 
+#define GQRandomColor [UIColor colorWithRed:arc4random_uniform(255)/255.0 green:arc4random_uniform(255)/255.0 blue:arc4random_uniform(255)/255.0 alpha:arc4random_uniform(255)/255.0]
+
 @interface DetailViewController ()
 
+@property (nonatomic, strong) GQRatingView *ratingView;
+@property (nonatomic, strong) GQRatingView *ratingView1;
 @end
 
 @implementation DetailViewController
@@ -21,13 +25,23 @@
     self.navigationController.visibleViewController.title = @"五星好评返现5元";
     
     //链式调用
-    [GQRatingView init]
+    _ratingView = [GQRatingView init]
     .frameChain(CGPointMake(50, 100),50)
     .canTouchChain(YES)
-    .needIntValueChain(YES)
-    .scoreNumChain(@5)
+    .needIntValueChain(NO)
+    .scoreNumChain(@3)
     .scroreBlockChain(^(NSNumber *scoreNumber){
-        NSLog(@"%@",scoreNumber);
+//        NSLog(@"%@",scoreNumber);
+    }).superViewChain(self.view);
+    
+    //链式调用
+    _ratingView1 = [GQRatingView init]
+    .frameChain(CGPointMake(50, 170),50)
+    .canTouchChain(NO)
+    .needIntValueChain(NO)
+    .scoreNumChain(@3)
+    .scroreBlockChain(^(NSNumber *scoreNumber){
+//        NSLog(@"%@",scoreNumber);
     }).superViewChain(self.view);
     
     //普通用法
@@ -44,6 +58,22 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self configureView];
+    
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width - 200)/2, 300, 200, 30);
+    [btn setTitle:@"随机切换颜色" forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    
+    [btn addTarget:self action:@selector(btnAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn];
+}
+
+- (void)btnAction:(id)sender {
+    _ratingView.normalColorChain(GQRandomColor);
+    _ratingView.highlightColorChian(GQRandomColor);
+    
+    _ratingView1.normalColorChain(GQRandomColor);
+    _ratingView1.highlightColorChian(GQRandomColor);
 }
 
 - (void)didReceiveMemoryWarning {
