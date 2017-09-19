@@ -174,7 +174,7 @@ GQChainObjectDefine(highlightColorChian, HighlightColor, UIColor *, GQColorChain
     if (_scoreNum != scoreNum) {
         if ([scoreNum floatValue] > 5.0f) {
             _scoreNum = @5;
-        }else if (scoreNum < 0){
+        }else if ([scoreNum floatValue] < 0){
             _scoreNum = @0;
         }
         _scoreNum = scoreNum;
