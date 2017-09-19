@@ -224,8 +224,6 @@ GQChainObjectDefine(highlightColorChian, HighlightColor, UIColor *, GQColorChain
     _yelloView.backgroundColor = [UIColor colorWithPatternImage:yelloImg];
     _yelloView.transform = CGAffineTransformMakeScale(grayHight/yelloImg.size.width, grayHight/yelloImg.size.height);
     
-    NSLog(@"begin: %.2f",_yellowWidthPercent);
-    
     _grayView.frame = CGRectMake(0, 0, grayWidth, grayHight);
     _yelloView.frame = CGRectMake(0, 0, _yellowWidthPercent * grayWidth, grayHight);
     

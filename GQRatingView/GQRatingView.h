@@ -22,6 +22,10 @@ typedef GQRatingView * (^GQColorChain)          (UIColor *color);
 
 @interface GQRatingView : UIView
 
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
+- (instancetype)initWithFrame:(CGRect)frame NS_UNAVAILABLE;
+
 #pragma mark -- 链式调用
 /**
  *  链式调用
@@ -98,17 +102,17 @@ typedef GQRatingView * (^GQColorChain)          (UIColor *color);
 @property (nonatomic, copy) GQScoreBlock scroreBlock;
 
 /**
- *  初始分数    默认满分为5分 0 - 5
+ *  初始分数  默认满分为5分 0 - 5
  */
 @property (nonatomic,strong) NSNumber *scoreNum;
 
 /**
- 设置底色
+ 设置底色 默认为grayColor
  */
 @property (nonatomic, strong) UIColor *normalColor;
 
 /**
- 设置高亮颜色
+ 设置高亮颜色  默认为yellowColor
  */
 @property (nonatomic, strong) UIColor *highlightColor;
 

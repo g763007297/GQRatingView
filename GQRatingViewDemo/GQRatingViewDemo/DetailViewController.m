@@ -30,6 +30,8 @@
     .canTouchChain(YES)
     .needIntValueChain(NO)
     .scoreNumChain(@3)
+    .normalColorChain([UIColor grayColor])
+    .highlightColorChian([UIColor yellowColor])
     .scroreBlockChain(^(NSNumber *scoreNumber){
 //        NSLog(@"%@",scoreNumber);
     }).superViewChain(self.view);
@@ -37,9 +39,11 @@
     //链式调用
     _ratingView1 = [GQRatingView init]
     .frameChain(CGPointMake(50, 170),50)
-    .canTouchChain(NO)
+    .canTouchChain(YES)
     .needIntValueChain(NO)
     .scoreNumChain(@3)
+    .normalColorChain([UIColor grayColor])
+    .highlightColorChian([UIColor yellowColor])
     .scroreBlockChain(^(NSNumber *scoreNumber){
 //        NSLog(@"%@",scoreNumber);
     }).superViewChain(self.view);
